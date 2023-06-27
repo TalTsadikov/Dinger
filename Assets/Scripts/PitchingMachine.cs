@@ -24,7 +24,7 @@ public class PitchingMachine : MonoBehaviour
     private float _currentThrowPower = 0f;
     private bool _isSliderIncreasing = true;
 
-    Ball _ball;
+    [SerializeField] Ball _ball;
 
     void Start()
     {
@@ -42,7 +42,12 @@ public class PitchingMachine : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && !_isThrowing)
         {
-            ThrowBall();
+            if (_ball._gotHit == false)
+            {
+                ThrowBall();
+            }
+            else
+                Debug.Log("not");
         }
 
         UpdateSliderValue();
@@ -52,7 +57,7 @@ public class PitchingMachine : MonoBehaviour
     {
         if (_isThrowing)
         {
-            if (_ball._gotHit ||_ballRigidbody.velocity.magnitude <= 0.01f)
+            if (_ballRigidbody.velocity.magnitude <= 0.01f)
             {
                 _ballRigidbody.velocity = Vector3.zero;
                 _ballRigidbody.angularVelocity = Vector3.zero;
