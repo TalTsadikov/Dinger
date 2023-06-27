@@ -9,37 +9,89 @@ public class PitchingMachine : MonoBehaviour
     [SerializeField] GameObject _prefab;
     [SerializeField] Transform _spawnPoint;
     Rigidbody _ballRigidbody;
-    private GameObject _ball;
+    private Vector3 _initialPosition;
 
-    [Header("Throw Force Variables")]
+    [Header("Throw Variables")]
     [SerializeField] float _throwForce;
+    Vector3 _throwDirection;
+    bool _isThrowing = false;
+
+    [Header("Slider Variables")]
     [SerializeField] Slider _throwForceSlider;
-    float _fillTime = 0f;
-    bool _thrown;
+    [SerializeField] private float _minSliderValue = 1f;
+    [SerializeField] private float _maxSliderValue = 100f;
+    [SerializeField] private float growthSpeed = 20f;
+    private float _currentThrowPower = 0f;
+    private bool _isSliderIncreasing = true;
+
+    Ball _ball;
 
     void Start()
     {
-        _ball = Instantiate(_prefab, _spawnPoint.position, _spawnPoint.rotation);
-        _ballRigidbody = _ball.GetComponent<Rigidbody>();
+        _ballRigidbody = GetComponent<Rigidbody>();
+        _ball = GetComponent<Ball>();
         _ballRigidbody.useGravity = false;
-        _thrown = false;
+        _initialPosition = transform.position;
+        _throwDirection = Vector3.back;
+        _currentThrowPower = _minSliderValue;
+        _throwForceSlider.value = _currentThrowPower;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && _thrown == false) 
+        if (Input.GetKeyDown(KeyCode.Space) && !_isThrowing)
         {
-            _thrown = true;
-            _throwForce = _throwForceSlider.value;
-            _ballRigidbody.AddForce(transform.forward * _throwForce * 50);
-            _ballRigidbody.useGravity = true;
+            ThrowBall();
         }
 
-        if (_thrown == false)
+        UpdateSliderValue();
+    }
+
+    void FixedUpdate()
+    {
+        if (_isThrowing)
         {
-            _throwForceSlider.value = Mathf.Lerp(_throwForceSlider.minValue, _throwForceSlider.maxValue, _fillTime);
-            _fillTime += 0.375f * Time.deltaTime;
+            if (_ball._gotHit ||_ballRigidbody.velocity.magnitude <= 0.01f)
+            {
+                _ballRigidbody.velocity = Vector3.zero;
+                _ballRigidbody.angularVelocity = Vector3.zero;
+                _isThrowing = false;
+            }
         }
+    }
+
+    void ThrowBall()
+    {
+        _ballRigidbody.velocity = _throwDirection * _currentThrowPower;
+        _ballRigidbody.useGravity = true;
+        _isThrowing = true;
+    }
+
+    void UpdateSliderValue()
+    {
+        if (!_isThrowing)
+        {
+            if (_isSliderIncreasing)
+            {
+                _currentThrowPower += growthSpeed * Time.deltaTime;
+                if (_currentThrowPower >= _maxSliderValue)
+                {
+                    _currentThrowPower = _maxSliderValue;
+                    _isSliderIncreasing = false;
+                }
+            }
+            else
+            {
+                _currentThrowPower -= growthSpeed * Time.deltaTime;
+                if (_currentThrowPower <= _minSliderValue)
+                {
+                    _currentThrowPower = _minSliderValue;
+                    _isSliderIncreasing = true;
+                }
+            }
+        }
+
+        _throwForceSlider.value = _currentThrowPower;
     }
 }
