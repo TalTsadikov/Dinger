@@ -898,8 +898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eb6eb27827a3f04bbfcb826ffe4c7f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 1502217422}
-  _spawnPoint: {fileID: 0}
+  _ballTransform: {fileID: 1502217434}
   _throwForce: 0
   _throwForceSlider: {fileID: 2088892787}
   _minSliderValue: 1
@@ -917,7 +916,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51ce57718d9d04e4f99f8dcabac4ef3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gotHit: 0
+--- !u!4 &1502217434 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6992050522204213253, guid: d5376d9c985fa8d4d936f0d882471a88, type: 3}
+  m_PrefabInstance: {fileID: 977672886}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1633342934
 GameObject:
   m_ObjectHideFlags: 0
@@ -963,7 +966,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1633342934}
   m_LocalRotation: {x: -0, y: 0.686116, z: -0, w: 0.7274922}
-  m_LocalPosition: {x: -2.21, y: 7.088, z: -25}
+  m_LocalPosition: {x: -2.21, y: 6.4, z: -25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
