@@ -8,7 +8,6 @@ public class PitchingMachine : MonoBehaviour
     [Header("Ball Variables")]
     [SerializeField] GameObject _prefab;
     [SerializeField] Transform _spawnPoint;
-    Rigidbody _ballRigidbody;
     private Vector3 _initialPosition;
 
     [Header("Throw Variables")]
@@ -28,11 +27,9 @@ public class PitchingMachine : MonoBehaviour
 
     void Start()
     {
-        _ballRigidbody = GetComponent<Rigidbody>();
         _ball = GetComponent<Ball>();
-        _ballRigidbody.useGravity = false;
+
         _initialPosition = transform.position;
-        _throwDirection = Vector3.back;
         _currentThrowPower = _minSliderValue;
         _throwForceSlider.value = _currentThrowPower;
     }
@@ -53,24 +50,10 @@ public class PitchingMachine : MonoBehaviour
         UpdateSliderValue();
     }
 
-    void FixedUpdate()
-    {
-        if (_isThrowing)
-        {
-            if (_ballRigidbody.velocity.magnitude <= 0.01f)
-            {
-                _ballRigidbody.velocity = Vector3.zero;
-                _ballRigidbody.angularVelocity = Vector3.zero;
-                _isThrowing = false;
-            }
-        }
-    }
-
     void ThrowBall()
     {
-        _ballRigidbody.velocity = _throwDirection * _currentThrowPower;
-        _ballRigidbody.useGravity = true;
         _isThrowing = true;
+        _ball.GetThrowPower(_currentThrowPower);
     }
 
     void UpdateSliderValue()
