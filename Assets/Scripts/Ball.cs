@@ -54,7 +54,7 @@ public class Ball : MonoBehaviour
         ballDirrection.y += _gravity * Time.deltaTime;
         transform.position += ballDirrection;
     }
-
+    
     public void GetThrowPower(float power)
     {
         _throwPower = power;
@@ -72,9 +72,6 @@ public class Ball : MonoBehaviour
             Vector3 hitDirrection =  other.ClosestPoint(transform.position)- this.transform.position;
             CalculateMove(hitDirrection*bat._currentForce*Time.deltaTime);
             _ballAngle = Vector3.Angle(hitDirrection, ballDirrection);
-            //isMoving = false;
-            //_ballAngle = Vector3.Angle(hitDirrection, transform.forward);
-            //transform.position = hitDirrection.normalized * bat._currentForce * Time.deltaTime;
         }
     }
 
